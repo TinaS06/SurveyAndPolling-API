@@ -18,27 +18,27 @@ public class ResponseController {
 
     @GetMapping
     public List<Response> getAllResponses() {
-        return responseService.getAll();
+        return responseService.getAllResponses();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Response> getResponseById(@PathVariable Long id) {
-        return responseService.getById(id)
+        return responseService.getResponseById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public Response createResponse(@RequestBody Response response) {
-        return responseService.createResponse(response);
+        return responseService.saveResponse(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Response> updateResponse(@PathVariable Long id, @RequestBody Response updatedResponse) {
-        return responseService.updateResponse(id, updatedResponse)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Response> updateResponse(@PathVariable Long id, @RequestBody Response updatedResponse) {
+//        return responseService.updateResponse(id, updatedResponse)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteResponse(@PathVariable Long id) {

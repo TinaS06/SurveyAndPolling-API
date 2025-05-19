@@ -8,7 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class ApiKeyInterceptor implements HandlerInterceptor {
 
-    private static final String API_KEY_HEADER = "X-API-KEY";
+    private static final String API_KEY_HEADER = "x-api-key";
     private final ApiKeyProperties apiKeyProperties;
 
     public ApiKeyInterceptor(ApiKeyProperties apiKeyProperties) {
