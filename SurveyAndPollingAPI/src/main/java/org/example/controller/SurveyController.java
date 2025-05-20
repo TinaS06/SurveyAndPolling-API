@@ -16,31 +16,31 @@ public class SurveyController {
     }
 
     @GetMapping
-    public List<Survey> getAllSurveys(@RequestHeader("X-API-KEY") String apiKey) {
+    public List<Survey> getAllSurveys(@RequestHeader("x-api-key") String apiKey) {
         return surveyService.getAll(apiKey);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Survey> getSurveyById(@PathVariable Long id, @RequestHeader("X-API-KEY") String apiKey) {
+    public ResponseEntity<Survey> getSurveyById(@PathVariable Long id, @RequestHeader("x-api-key") String apiKey) {
         return surveyService.getById(id, apiKey)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Survey createSurvey(@RequestBody Survey survey, @RequestHeader("X-API-KEY") String apiKey) {
+    public Survey createSurvey(@RequestBody Survey survey, @RequestHeader("x-api-key") String apiKey) {
         return surveyService.createSurvey(survey, apiKey);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Survey> updateSurvey(@PathVariable Long id, @RequestBody Survey survey, @RequestHeader("X-API-KEY") String apiKey) {
+    public ResponseEntity<Survey> updateSurvey(@PathVariable Long id, @RequestBody Survey survey, @RequestHeader("x-api-key") String apiKey) {
         return surveyService.updateSurvey(id, survey, apiKey)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSurvey(@PathVariable Long id, @RequestHeader("X-API-KEY") String apiKey) {
+    public ResponseEntity<Void> deleteSurvey(@PathVariable Long id, @RequestHeader("x-api-key") String apiKey) {
         surveyService.deleteSurvey(id, apiKey);
         return ResponseEntity.noContent().build();
     }

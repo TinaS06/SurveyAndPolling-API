@@ -1,8 +1,6 @@
 package org.example.controller;
 import org.example.service.ReportService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -17,12 +15,12 @@ public class ReportController {
     }
 
     @GetMapping("/survey-summary")
-    public Map<String, Object> getSurveySummary() {
-        return reportService.getSurveySummary();
+    public Map<String, Object> getSurveySummary(@RequestHeader("x-api-key") String apiKey) {
+        return reportService.getSurveySummary(apiKey);
     }
 
     @GetMapping("/audit-logs")
-    public Map<String, Object> getAuditLogs() {
-        return reportService.getAuditLogs();
+    public Map<String, Object> getAuditLogs(@RequestHeader("x-api-key") String apiKey) {
+        return reportService.getAuditLogs(apiKey);
     }
 }

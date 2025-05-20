@@ -14,6 +14,14 @@ public class Option {
     @JoinColumn(name = "question_id")
     private Question question;
 
+    public Option() {
+    }
+
+    public Option(String text, Question question) {
+        this.text = text;
+        this.question = question;
+    }
+
     public Long getId() {
         return id;
     }

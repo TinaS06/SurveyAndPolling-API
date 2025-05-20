@@ -19,12 +19,12 @@ public class QuestionService {
     }
 
     public List<Question> getAll(String apiKey) {
-        auditService.log("GET_ALL", "Question", apiKey);
+        auditService.log("READ_ALL", "Question", apiKey);
         return questionRepository.findAll();
     }
 
     public Optional<Question> getById(Long id, String apiKey) {
-        auditService.log("GET_BY_ID", "Question", apiKey);
+        auditService.log("READ", "Question", apiKey);
         return questionRepository.findById(id);
     }
 

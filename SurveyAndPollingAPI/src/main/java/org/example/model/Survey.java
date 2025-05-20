@@ -1,5 +1,6 @@
 package org.example.model;
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -8,11 +9,12 @@ public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
 
-    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
-    private List<Question> questions;
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
+
+    public Survey() {}
 
     public Long getId() {
         return id;

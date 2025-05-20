@@ -17,12 +17,14 @@ public class SurveyService {
     }
 
     public List<Survey> getAll(String apiKey) {
-        auditService.log("GET_ALL", "Survey", apiKey);
+        // Changed to be consistent with other services
+        auditService.log("READ_ALL", "Survey", apiKey);
         return surveyRepository.findAll();
     }
 
     public Optional<Survey> getById(Long id, String apiKey) {
-        auditService.log("GET_BY_ID", "Survey", apiKey);
+        // Changed to be consistent with other services
+        auditService.log("READ", "Survey", apiKey);
         return surveyRepository.findById(id);
     }
 

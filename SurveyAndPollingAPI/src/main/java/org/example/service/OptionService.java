@@ -17,12 +17,12 @@ public class OptionService {
     }
 
     public List<Option> getAll(String apiKey) {
-        auditService.log("GET_ALL", "Option", apiKey);
+        auditService.log("READ_ALL", "Option", apiKey);
         return optionRepository.findAll();
     }
 
     public Optional<Option> getById(Long id, String apiKey) {
-        auditService.log("GET_BY_ID", "Option", apiKey);
+        auditService.log("READ", "Option", apiKey);
         return optionRepository.findById(id);
     }
 

@@ -16,32 +16,32 @@ public class ResponseController {
     }
 
     @GetMapping
-    public List<Response> getAllResponses() {
-        return responseService.getAllResponses();
+    public List<Response> getAllResponses(@RequestHeader("x-api-key") String apiKey) {
+        return responseService.getAllResponses(apiKey);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Response> getResponseById(@PathVariable Long id) {
-        return responseService.getResponseById(id)
+    public ResponseEntity<Response> getResponseById(@PathVariable Long id, @RequestHeader("x-api-key") String apiKey) {
+        return responseService.getResponseById(id, apiKey)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Response createResponse(@RequestBody Response response) {
-        return responseService.saveResponse(response);
+    public Response createResponse(@RequestBody Response response, @RequestHeader("x-api-key") String apiKey) {
+        return responseService.saveResponse(response, apiKey);
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Response> updateResponse(@PathVariable Long id, @RequestBody Response updatedResponse) {
-//       return responseService.updateResponse(id, updatedResponse)
-//                .map(ResponseEntity::ok)
-//                .orElse(ResponseEntity.notFound().build());
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Response> updateResponse(@PathVariable Long id, @RequestBody Response updatedResponse, @RequestHeader("x-api-key") String apiKey) {
+        return responseService.updateResponse(id, updatedResponse, apiKey)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteResponse(@PathVariable Long id) {
-        responseService.deleteResponse(id);
+    public ResponseEntity<Void> deleteResponse(@PathVariable Long id, @RequestHeader("x-api-key") String apiKey) {
+        responseService.deleteResponse(id, apiKey);
         return ResponseEntity.noContent().build();
     }
 }
