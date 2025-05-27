@@ -58,5 +58,4 @@ public class Response {
     public void setRespondent(String respondent) {
         this.respondent = respondent;
     }
-
 }

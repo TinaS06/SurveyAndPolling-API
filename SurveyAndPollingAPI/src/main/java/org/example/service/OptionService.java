@@ -2,6 +2,9 @@ package org.example.service;
 import org.example.model.Option;
 import org.example.repository.OptionRepository;
 import org.springframework.stereotype.Service;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,23 +19,32 @@ public class OptionService {
         this.auditService = auditService;
     }
 
-    public List<Option> getAll(String apiKey) {
-        auditService.log("READ_ALL", "Option", apiKey);
+    private String getApiKeyFromRequest() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getHeader("x-api-key");
+        }
+        return "unknown";
+    }
+
+    public List<Option> getAll() {
+        auditService.log("READ_ALL", "Option", getApiKeyFromRequest());
         return optionRepository.findAll();
     }
 
-    public Optional<Option> getById(Long id, String apiKey) {
-        auditService.log("READ", "Option", apiKey);
+    public Optional<Option> getById(Long id) {
+        auditService.log("READ", "Option", getApiKeyFromRequest());
         return optionRepository.findById(id);
     }
 
-    public Option createOption(Option option, String apiKey) {
-        auditService.log("CREATE", "Option", apiKey);
+    public Option createOption(Option option) {
+        auditService.log("CREATE", "Option", getApiKeyFromRequest());
         return optionRepository.save(option);
     }
 
-    public Optional<Option> updateOption(Long id, Option updatedOption, String apiKey) {
-        auditService.log("UPDATE", "Option", apiKey);
+    public Optional<Option> updateOption(Long id, Option updatedOption) {
+        auditService.log("UPDATE", "Option", getApiKeyFromRequest());
         return optionRepository.findById(id).map(existingOption -> {
             existingOption.setText(updatedOption.getText());
             existingOption.setQuestion(updatedOption.getQuestion());
@@ -40,8 +52,8 @@ public class OptionService {
         });
     }
 
-    public void deleteOption(Long id, String apiKey) {
-        auditService.log("DELETE", "Option", apiKey);
+    public void deleteOption(Long id) {
+        auditService.log("DELETE", "Option", getApiKeyFromRequest());
         optionRepository.deleteById(id);
     }
 }

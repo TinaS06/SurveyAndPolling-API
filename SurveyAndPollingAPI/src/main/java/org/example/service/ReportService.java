@@ -2,6 +2,9 @@ package org.example.service;
 import org.example.model.Response;
 import org.example.repository.ResponseRepository;
 import org.springframework.stereotype.Service;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,18 +20,27 @@ public class ReportService {
         this.auditService = auditService;
     }
 
-    public Map<String, Object> getSurveySummary(String apiKey) {
+    private String getApiKeyFromRequest() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getHeader("x-api-key");
+        }
+        return "unknown";
+    }
+
+    public Map<String, Object> getSurveySummary() {
         List<Response> responses = responseRepository.findAll();
         Map<String, Object> summary = new HashMap<>();
         summary.put("totalResponses", responses.size());
-        auditService.log("REPORT", "SurveySummary", apiKey);
+        auditService.log("REPORT", "SurveySummary", getApiKeyFromRequest());
         return summary;
     }
 
-    public Map<String, Object> getAuditLogs(String apiKey) {
+    public Map<String, Object> getAuditLogs() {
         Map<String, Object> logs = new HashMap<>();
         logs.put("logs", auditService.getAllLogs());
-        auditService.log("REPORT", "AuditLogs", apiKey);
+        auditService.log("REPORT", "AuditLogs", getApiKeyFromRequest());
         return logs;
     }
 }

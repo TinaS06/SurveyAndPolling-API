@@ -1,9 +1,10 @@
 package org.example.service;
-
 import org.example.model.Question;
 import org.example.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
-
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,23 +19,32 @@ public class QuestionService {
         this.auditService = auditService;
     }
 
-    public List<Question> getAll(String apiKey) {
-        auditService.log("READ_ALL", "Question", apiKey);
+    private String getApiKeyFromRequest() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getHeader("x-api-key");
+        }
+        return "unknown";
+    }
+
+    public List<Question> getAll() {
+        auditService.log("READ_ALL", "Question", getApiKeyFromRequest());
         return questionRepository.findAll();
     }
 
-    public Optional<Question> getById(Long id, String apiKey) {
-        auditService.log("READ", "Question", apiKey);
+    public Optional<Question> getById(Long id) {
+        auditService.log("READ", "Question", getApiKeyFromRequest());
         return questionRepository.findById(id);
     }
 
-    public Question createQuestion(Question question, String apiKey) {
-        auditService.log("CREATE", "Question", apiKey);
+    public Question createQuestion(Question question) {
+        auditService.log("CREATE", "Question", getApiKeyFromRequest());
         return questionRepository.save(question);
     }
 
-    public Optional<Question> updateQuestion(Long id, Question updatedQuestion, String apiKey) {
-        auditService.log("UPDATE", "Question", apiKey);
+    public Optional<Question> updateQuestion(Long id, Question updatedQuestion) {
+        auditService.log("UPDATE", "Question", getApiKeyFromRequest());
         return questionRepository.findById(id).map(existingQuestion -> {
             existingQuestion.setText(updatedQuestion.getText());
             existingQuestion.setSurvey(updatedQuestion.getSurvey());
@@ -43,8 +53,8 @@ public class QuestionService {
         });
     }
 
-    public void deleteQuestion(Long id, String apiKey) {
-        auditService.log("DELETE", "Question", apiKey);
+    public void deleteQuestion(Long id) {
+        auditService.log("DELETE", "Question", getApiKeyFromRequest());
         questionRepository.deleteById(id);
     }
 }

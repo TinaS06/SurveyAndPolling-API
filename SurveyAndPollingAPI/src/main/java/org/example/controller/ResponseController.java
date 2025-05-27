@@ -16,32 +16,32 @@ public class ResponseController {
     }
 
     @GetMapping
-    public List<Response> getAllResponses(@RequestHeader("x-api-key") String apiKey) {
-        return responseService.getAllResponses(apiKey);
+    public List<Response> getAllResponses() {
+        return responseService.getAllResponses();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Response> getResponseById(@PathVariable Long id, @RequestHeader("x-api-key") String apiKey) {
-        return responseService.getResponseById(id, apiKey)
+    public ResponseEntity<Response> getResponseById(@PathVariable Long id) {
+        return responseService.getResponseById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Response createResponse(@RequestBody Response response, @RequestHeader("x-api-key") String apiKey) {
-        return responseService.saveResponse(response, apiKey);
+    public Response createResponse(@RequestBody Response response) {
+        return responseService.saveResponse(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response> updateResponse(@PathVariable Long id, @RequestBody Response updatedResponse, @RequestHeader("x-api-key") String apiKey) {
-        return responseService.updateResponse(id, updatedResponse, apiKey)
+    public ResponseEntity<Response> updateResponse(@PathVariable Long id, @RequestBody Response updatedResponse) {
+        return responseService.updateResponse(id, updatedResponse)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteResponse(@PathVariable Long id, @RequestHeader("x-api-key") String apiKey) {
-        responseService.deleteResponse(id, apiKey);
+    public ResponseEntity<Void> deleteResponse(@PathVariable Long id) {
+        responseService.deleteResponse(id);
         return ResponseEntity.noContent().build();
     }
 }

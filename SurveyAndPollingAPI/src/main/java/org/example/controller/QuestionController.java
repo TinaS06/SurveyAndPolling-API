@@ -16,32 +16,32 @@ public class QuestionController {
     }
 
     @GetMapping
-    public List<Question> getAllQuestions(@RequestHeader("x-api-key") String apiKey) {
-        return questionService.getAll(apiKey);
+    public List<Question> getAllQuestions() {
+        return questionService.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Question> getQuestionById(@PathVariable Long id, @RequestHeader("x-api-key") String apiKey) {
-        return questionService.getById(id, apiKey)
+    public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
+        return questionService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Question createQuestion(@RequestBody Question question, @RequestHeader("x-api-key") String apiKey) {
-        return questionService.createQuestion(question, apiKey);
+    public Question createQuestion(@RequestBody Question question) {
+        return questionService.createQuestion(question);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Question> updateQuestion(@PathVariable Long id, @RequestBody Question question, @RequestHeader("x-api-key") String apiKey) {
-        return questionService.updateQuestion(id, question, apiKey)
+    public ResponseEntity<Question> updateQuestion(@PathVariable Long id, @RequestBody Question question) {
+        return questionService.updateQuestion(id, question)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id, @RequestHeader("x-api-key") String apiKey) {
-        questionService.deleteQuestion(id, apiKey);
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
+        questionService.deleteQuestion(id);
         return ResponseEntity.noContent().build();
     }
 }

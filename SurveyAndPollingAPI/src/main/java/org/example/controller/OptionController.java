@@ -16,32 +16,32 @@ public class OptionController {
     }
 
     @GetMapping
-    public List<Option> getAllOptions(@RequestHeader("x-api-key") String apiKey) {
-        return optionService.getAll(apiKey);
+    public List<Option> getAllOptions() {
+        return optionService.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Option> getOptionById(@PathVariable Long id, @RequestHeader("x-api-key") String apiKey) {
-        return optionService.getById(id, apiKey)
+    public ResponseEntity<Option> getOptionById(@PathVariable Long id) {
+        return optionService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Option createOption(@RequestBody Option option, @RequestHeader("x-api-key") String apiKey) {
-        return optionService.createOption(option, apiKey);
+    public Option createOption(@RequestBody Option option) {
+        return optionService.createOption(option);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Option> updateOption(@PathVariable Long id, @RequestBody Option option, @RequestHeader("x-api-key") String apiKey) {
-        return optionService.updateOption(id, option, apiKey)
+    public ResponseEntity<Option> updateOption(@PathVariable Long id, @RequestBody Option option) {
+        return optionService.updateOption(id, option)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOption(@PathVariable Long id, @RequestHeader("x-api-key") String apiKey) {
-        optionService.deleteOption(id, apiKey);
+    public ResponseEntity<Void> deleteOption(@PathVariable Long id) {
+        optionService.deleteOption(id);
         return ResponseEntity.noContent().build();
     }
 }

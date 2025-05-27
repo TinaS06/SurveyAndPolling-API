@@ -2,6 +2,9 @@ package org.example.service;
 import org.example.model.Response;
 import org.example.repository.ResponseRepository;
 import org.springframework.stereotype.Service;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,28 +19,37 @@ public class ResponseService {
         this.auditService = auditService;
     }
 
-    public List<Response> getAllResponses(String apiKey) {
-        auditService.log("READ_ALL", "Response", apiKey);
+    private String getApiKeyFromRequest() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getHeader("x-api-key");
+        }
+        return "unknown";
+    }
+
+    public List<Response> getAllResponses() {
+        auditService.log("READ_ALL", "Response", getApiKeyFromRequest());
         return responseRepository.findAll();
     }
 
-    public Response saveResponse(Response response, String apiKey) {
-        auditService.log("CREATE", "Response", apiKey);
+    public Response saveResponse(Response response) {
+        auditService.log("CREATE", "Response", getApiKeyFromRequest());
         return responseRepository.save(response);
     }
 
-    public Optional<Response> getResponseById(Long id, String apiKey) {
-        auditService.log("READ", "Response", apiKey);
+    public Optional<Response> getResponseById(Long id) {
+        auditService.log("READ", "Response", getApiKeyFromRequest());
         return responseRepository.findById(id);
     }
 
-    public void deleteResponse(Long id, String apiKey) {
-        auditService.log("DELETE", "Response", apiKey);
+    public void deleteResponse(Long id) {
+        auditService.log("DELETE", "Response", getApiKeyFromRequest());
         responseRepository.deleteById(id);
     }
 
-    public Optional<Response> updateResponse(Long id, Response updatedResponse, String apiKey) {
-        auditService.log("UPDATE", "Response", apiKey);
+    public Optional<Response> updateResponse(Long id, Response updatedResponse) {
+        auditService.log("UPDATE", "Response", getApiKeyFromRequest());
         return responseRepository.findById(id).map(existingResponse -> {
             existingResponse.setSurvey(updatedResponse.getSurvey());
             existingResponse.setQuestion(updatedResponse.getQuestion());

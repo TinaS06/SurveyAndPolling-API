@@ -2,6 +2,9 @@ package org.example.service;
 import org.example.model.Survey;
 import org.example.repository.SurveyRepository;
 import org.springframework.stereotype.Service;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,25 +19,32 @@ public class SurveyService {
         this.auditService = auditService;
     }
 
-    public List<Survey> getAll(String apiKey) {
-        // Changed to be consistent with other services
-        auditService.log("READ_ALL", "Survey", apiKey);
+    private String getApiKeyFromRequest() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getHeader("x-api-key");
+        }
+        return "unknown";
+    }
+
+    public List<Survey> getAll() {
+        auditService.log("READ_ALL", "Survey", getApiKeyFromRequest());
         return surveyRepository.findAll();
     }
 
-    public Optional<Survey> getById(Long id, String apiKey) {
-        // Changed to be consistent with other services
-        auditService.log("READ", "Survey", apiKey);
+    public Optional<Survey> getById(Long id) {
+        auditService.log("READ", "Survey", getApiKeyFromRequest());
         return surveyRepository.findById(id);
     }
 
-    public Survey createSurvey(Survey survey, String apiKey) {
-        auditService.log("CREATE", "Survey", apiKey);
+    public Survey createSurvey(Survey survey) {
+        auditService.log("CREATE", "Survey", getApiKeyFromRequest());
         return surveyRepository.save(survey);
     }
 
-    public Optional<Survey> updateSurvey(Long id, Survey updatedSurvey, String apiKey) {
-        auditService.log("UPDATE", "Survey", apiKey);
+    public Optional<Survey> updateSurvey(Long id, Survey updatedSurvey) {
+        auditService.log("UPDATE", "Survey", getApiKeyFromRequest());
         return surveyRepository.findById(id).map(existingSurvey -> {
             existingSurvey.setTitle(updatedSurvey.getTitle());
             existingSurvey.setQuestions(updatedSurvey.getQuestions());
@@ -42,8 +52,8 @@ public class SurveyService {
         });
     }
 
-    public void deleteSurvey(Long id, String apiKey) {
-        auditService.log("DELETE", "Survey", apiKey);
+    public void deleteSurvey(Long id) {
+        auditService.log("DELETE", "Survey", getApiKeyFromRequest());
         surveyRepository.deleteById(id);
     }
 }
