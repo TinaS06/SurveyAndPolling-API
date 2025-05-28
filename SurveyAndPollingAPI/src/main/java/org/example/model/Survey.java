@@ -1,6 +1,5 @@
 package org.example.model;
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,6 @@ public class Survey {
     private String title;
 
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("survey-questions")
     private List<Question> questions = new ArrayList<>();
 
     public Survey() {}

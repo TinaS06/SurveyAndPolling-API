@@ -1,7 +1,6 @@
 package org.example.model;
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 
 @Entity
@@ -14,11 +13,10 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "survey_id")
-    @JsonBackReference("survey-questions")
+    @JsonIgnore
     private Survey survey;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    @JsonManagedReference("question-options")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options;
 
     public Long getId() {

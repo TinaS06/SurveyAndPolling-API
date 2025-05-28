@@ -1,6 +1,6 @@
 package org.example.model;
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Option {
@@ -13,7 +13,7 @@ public class Option {
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    @JsonBackReference("question-options")
+    @JsonIgnore
     private Question question;
 
     public Option() {
